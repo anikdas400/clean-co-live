@@ -1,22 +1,31 @@
 
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 const Login = () => {
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("")
     const {login,user}=useAuth()
+    const navigate = useNavigate()
+    
     console.log(user)
     const handleSubmit = async (e) =>{
         e.preventDefault()
+        const toastId = toast.loading("loading.....")
         console.log(email,password)
         try{
             await login(email,password)
-            console.log("logged in")
+            toast.success("logged in successfully",{id: toastId})
+            navigate("/")
+            
+            
         }
         catch(err){
-            console.log(err)
+            
+            toast.error(err.message,{id: toastId})
         }
     }
     return (
